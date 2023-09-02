@@ -1,29 +1,86 @@
-import { StyleSheet, SafeAreaView } from "react-native";
+import {
+  StyleSheet,
+  SafeAreaView,
+  TextInput,
+  Text,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
+import { Button } from "react-native-paper";
 
-import { Text, View } from "../../components/Themed";
+import { useState } from "react";
+import { calculateNameCompatibility } from "../../utils/calculateName";
 
 export default function TabOneScreen() {
+  const [firstName, setFirstName] = useState<string>("");
+  const [secondName, setSecondName] = useState<string>("");
+  const [result, setResult] = useState<string>("");
+
+  const handleButton = () => {
+    if (firstName.trim() === "" || secondName.trim() === "") {
+      alert("Lütfen isimleri giriniz");
+      return;
+    }
+    const value1 = calculateNameCompatibility(firstName, secondName);
+    setResult(value1);
+  };
+
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.container}>
-        <Text style={styles.title}>Tab One</Text>
-      </View>
+    <SafeAreaView style={styles.containerSafe}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={styles.container}
+      >
+        <Text style={styles.title}>İki isim arasındaki uyumu bul</Text>
+        <TextInput
+          placeholderTextColor={"#ADA4A5"}
+          placeholder={"İlk isim"}
+          style={styles.input}
+          onChangeText={setFirstName}
+          value={firstName}
+        />
+        <TextInput
+          onChangeText={setSecondName}
+          value={secondName}
+          placeholderTextColor={"#ADA4A5"}
+          placeholder={"İkinci isim"}
+          style={styles.input}
+        />
+
+        <Button mode="contained" contentStyle={styles.button} onPress={handleButton}>
+          Hesapla
+        </Button>
+        <Text>{result}</Text>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  containerSafe: {
     flex: 1,
     backgroundColor: "#fff",
+  },
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginHorizontal: 16,
+    gap: 16,
   },
   title: {
     fontSize: 20,
     fontWeight: "bold",
   },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: "80%",
+  input: {
+    height: 48,
+    padding: 16,
+    backgroundColor: "#F7F8F8",
+    borderRadius: 14,
+    alignSelf: "stretch",
+    color: "#7B6F72",
+  },
+  button: {
+    flexDirection: "row-reverse",
   },
 });
