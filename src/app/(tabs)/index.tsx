@@ -9,20 +9,24 @@ import {
 import { Button } from "react-native-paper";
 
 import { useState } from "react";
-import { calculateNameCompatibility } from "../../utils/calculateName";
+import { calculateNameCompatibility } from "@/utils/calculateName";
+
+import { router } from "expo-router";
 
 export default function TabOneScreen() {
   const [firstName, setFirstName] = useState<string>("");
   const [secondName, setSecondName] = useState<string>("");
-  const [result, setResult] = useState<string>("");
 
   const handleButton = () => {
     if (firstName.trim() === "" || secondName.trim() === "") {
       alert("Lütfen isimleri giriniz");
       return;
     }
-    const value1 = calculateNameCompatibility(firstName, secondName);
-    setResult(value1);
+    const value = calculateNameCompatibility(firstName, secondName);
+    router.push({
+      pathname: "result",
+      params: { resultValue: value, firstName, secondName },
+    } as any);
   };
 
   return (
@@ -50,7 +54,6 @@ export default function TabOneScreen() {
         <Button mode="contained" contentStyle={styles.button} onPress={handleButton}>
           Hesapla
         </Button>
-        <Text>{result}</Text>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
