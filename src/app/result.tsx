@@ -1,12 +1,42 @@
-import { View, Text, StyleSheet, ImageBackground } from "react-native";
-import React from "react";
-import { Stack, useLocalSearchParams } from "expo-router";
+import { View, Text, StyleSheet, ImageBackground, TouchableOpacity } from "react-native";
+import { useRef } from "react";
+import { Stack, useLocalSearchParams, router } from "expo-router";
 import getCompatibilityResult from "src/utils/getCompatibilityResult";
+import { captureRef } from "react-native-view-shot";
+import * as Sharing from "expo-sharing";
 
-export default function Result(props: any) {
-  const { resultValue, firstName, secondName } = useLocalSearchParams();
+export default function Result() {
+  const { resultValue, firstName, secondName } = useLocalSearchParams() as any;
+  const viewImage = useRef(null);
 
   const { title, description } = getCompatibilityResult(Number(resultValue));
+
+  const snapshot = async () => {
+    try {
+      const uri = await captureRef(viewImage, {
+        format: "png",
+        quality: 1,
+        fileName: `${firstName}-${secondName}.png`,
+      });
+
+      const options = {
+        mimeType: "image/png",
+        dialogTitle: "Aşk ile Paylaş",
+      };
+
+      await Sharing.shareAsync(uri, options);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleSnapShot = () => {
+    snapshot().catch((error) => {
+      console.error("Snapshot hatası:", error);
+    });
+  };
+
+  const isDescription = true;
 
   return (
     <View style={styles.container}>
@@ -20,21 +50,50 @@ export default function Result(props: any) {
         }}
       />
       <Text style={styles.title}>{resultValue}</Text>
-      <Text style={styles.description}>{description}</Text>
-
-      <ImageBackground
-        resizeMode="cover"
-        source={require("../../assets/images/heart3d.jpg")}
-        style={styles.image}
-      >
-        <View style={styles.heartArea}>
-          <View style={{ flexDirection: "row" }}>
-            <Text style={styles.text}>{firstName}</Text>
-            <Text style={styles.text}>{secondName}</Text>
+      <View ref={viewImage} collapsable={false} style={{ backgroundColor: "#fff" }}>
+        <ImageBackground
+          resizeMode="cover"
+          source={require("../../assets/images/heart3d.jpg")}
+          style={styles.image}
+        >
+          <View style={styles.heartArea}>
+            <View style={{ flexDirection: "row" }}>
+              <Text style={styles.text}>{firstName}</Text>
+              <Text style={styles.text}>{secondName}</Text>
+            </View>
+            <Text style={styles.resultHeart}>{resultValue}</Text>
           </View>
-          <Text style={styles.resultHeart}>{resultValue}</Text>
-        </View>
-      </ImageBackground>
+        </ImageBackground>
+        {isDescription && (
+          <View style={{ paddingHorizontal: 16 }}>
+            <Text style={styles.description}>{description}</Text>
+          </View>
+        )}
+      </View>
+
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-around",
+          marginTop: "auto",
+          paddingVertical: 40,
+        }}
+      >
+        <TouchableOpacity
+          onPress={() => {
+            router.back();
+          }}
+        >
+          <Text style={{ fontSize: 20, fontWeight: "bold", color: "red" }}>Geri</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            handleSnapShot();
+          }}
+        >
+          <Text style={{ fontSize: 20, fontWeight: "bold", color: "green" }}>Paylaş</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
