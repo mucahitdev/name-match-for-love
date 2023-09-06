@@ -23,8 +23,7 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.koksoft.namematchforlove",
-      "versionCode": 2
+      "package": "com.koksoft.namematchforlove"
     },
     "web": {
       "bundler": "metro",
