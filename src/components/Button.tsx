@@ -1,6 +1,13 @@
 import { colors } from "@/constants/Colors";
 import React from "react";
-import { Text, StyleSheet, TouchableOpacity, type StyleProp, type ViewStyle } from "react-native";
+import {
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  type StyleProp,
+  type ViewStyle,
+  Platform,
+} from "react-native";
 import * as Haptics from "expo-haptics";
 
 interface ButtonProps {
@@ -11,6 +18,7 @@ interface ButtonProps {
 
 export default function Button({ title, onPress, coontaierStyle }: ButtonProps) {
   const handleHaptics = async () => {
+    if (Platform.OS === "web") return;
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Soft);
   };
   return (
