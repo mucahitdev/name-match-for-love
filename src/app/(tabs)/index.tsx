@@ -6,12 +6,13 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
-import { Button } from "react-native-paper";
 
 import { useState } from "react";
 import { calculateNameCompatibility } from "@/utils/calculateName";
 
 import { router } from "expo-router";
+import Button from "@/components/Button";
+import { colors } from "@/constants/Colors";
 
 export default function TabOneScreen() {
   const [firstName, setFirstName] = useState<string>("");
@@ -51,9 +52,7 @@ export default function TabOneScreen() {
           style={styles.input}
         />
 
-        <Button mode="contained" contentStyle={styles.button} onPress={handleButton}>
-          Hesapla
-        </Button>
+        <Button onPress={handleButton} title="Hesapla" />
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
@@ -62,14 +61,14 @@ export default function TabOneScreen() {
 const styles = StyleSheet.create({
   containerSafe: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: colors.canvas,
   },
   container: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
     marginHorizontal: 16,
-    gap: 16,
+    gap: 28,
   },
   title: {
     fontSize: 20,

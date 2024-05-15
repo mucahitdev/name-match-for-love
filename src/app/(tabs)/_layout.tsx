@@ -1,4 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
+import { Text } from "react-native";
 
 import { Tabs } from "expo-router";
 // import { useColorScheme } from "react-native";
@@ -25,6 +26,11 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         headerShown: false,
+        tabBarActiveTintColor: "tomato",
+        tabBarLabel: ({ focused, color, children }) => {
+          const fontWeight = focused ? "bold" : "normal";
+          return <Text style={{ color, fontWeight }}>{children}</Text>;
+        },
       }}
     >
       <Tabs.Screen
