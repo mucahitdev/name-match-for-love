@@ -3,11 +3,9 @@
     "appVersionSource": "remote"
   },
   "build": {
-    "development": {
+    "dev": {
+      "channel": "devC",
       "developmentClient": true,
-      "distribution": "internal"
-    },
-    "preview": {
       "distribution": "internal"
     },
     "production": {
@@ -18,7 +16,7 @@
   "submit": {
     "production": {
       "android": {
-        "serviceAccountKeyPath": "./key/key-google.json"
+        "track": "internal"
       }
     }
   }
